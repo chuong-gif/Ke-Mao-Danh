@@ -40,3 +40,10 @@ sysinfo.txt
 # OS generated
 .DS_Store
 Thumbs.db
+
+# Visual Studio cache and settings
+.vs/
+*.user
+*.userprefs
+*.sln.docstates
+*.suo
