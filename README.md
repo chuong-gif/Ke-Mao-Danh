@@ -1,6 +1,6 @@
 # Game 2D Unity - Kẻ Mạo Danh
 
-![banner](Screenshots/banner.png)
+![banner](Screenshots/bannerkmd.png)
 
 ## Tổng quan ##
 - Tên đề tài: Trò chơi “Kẻ mạo danh” 
