@@ -1,24 +1,24 @@
-# Among Us Clone
+# Game 2D Unity - Kẻ Mạo Danh
 
-![banner](Screenshots/banner.png)
+![banner](Screenshots/bannerkmd.png)
 
-## Description ##
+## Tổng quan ##
+- Tên đề tài: Trò chơi “Kẻ mạo danh” 
+- Bối cảnh: Trò chơi giả lập môi trường trạm không gian cô lập. Một nhóm người chơi phải phối hợp để duy trì vận hành trạm, trong khi một số thành viên ẩn danh tìm cách phá hoại hệ thống và tiêu diệt phi hành đoàn.
 
-This project is an Among Us clone developed solely for educational purposes. All rights are owned by InnerSloth, LLC.
+## Thành viên ##
+1	Nguyễn Ngọc Hân	2312607	CTK47A	2312607@dlu.edu.vn <br>
+2	Ngô Văn Chương	2312588	CTK47A	2312588@dlu.edu.vn <br>
+3	Nguyễn Thị Trường Nga	2312697	CTK47A	2312697@dlu.edu.vn <br>
 
-## Screenshots ##
+
+## Review ##
 
 <img src="Screenshots/game_gif.gif" width="400"> <img src="Screenshots/card_task.gif" width="400">
 
-## Include ##
-This project uses Unity Engine 2019.4.40f1
+## Công cụ ##
+This project uses Unity Engine
 
-✅Camera system <br />
-✅Skeld Map (90% completed) <br />
-✅Player Controller <br />
-✅Tasks <br />
-✅Main Menu <br />
-✅Lobby Map System <br />
-❎Multiplayer System <br />
+
 
 
