@@ -101,7 +101,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7857967813221401964}
-  - component: {fileID: 1714183080719184385}
   - component: {fileID: 4374719181923556085}
   - component: {fileID: 3002421280134599025}
   - component: {fileID: 2358217538779203339}
@@ -129,69 +128,6 @@ Transform:
   - {fileID: 7856700523920284262}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1714183080719184385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1405044410520027332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28fed63cf32d39b4b8d67c4e84aac8fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  movementSpeed: 10
-  WASD:
-    m_Name: WASD
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: c1d054f4-e65d-48d0-8d98-717070b80c53
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: Movement
-      m_Id: b6ccbd6f-510e-4888-9587-da6e256de4e2
-      m_Path: 2DVector
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: WASD
-      m_Flags: 4
-    - m_Name: up
-      m_Id: 62d27683-c1a6-48f9-8811-b1911a8cd233
-      m_Path: <Keyboard>/w
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: WASD
-      m_Flags: 8
-    - m_Name: down
-      m_Id: 84eec79c-154f-4dca-b42e-dd4884a79c61
-      m_Path: <Keyboard>/s
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: WASD
-      m_Flags: 8
-    - m_Name: left
-      m_Id: caad9076-fb7e-4309-a4e2-68fdc2821244
-      m_Path: <Keyboard>/a
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: WASD
-      m_Flags: 8
-    - m_Name: right
-      m_Id: c13f7488-023b-4660-a337-94e5e1120140
-      m_Path: <Keyboard>/d
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: WASD
-      m_Flags: 8
-    m_Flags: 0
-  spriteTransform: {fileID: 0}
 --- !u!70 &4374719181923556085
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
