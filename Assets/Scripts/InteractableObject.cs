@@ -22,8 +22,24 @@ public class InteractableObject : MonoBehaviour
     public void Initialize()
     {
         PlayerEnt = GameObject.FindWithTag("Player").GetComponentInChildren<Player>();
-        ActionButton = GameObject.FindWithTag("PlayerUI").GetComponentInChildren<Button>();
-        BaseUseSprite = ActionButton.gameObject.GetComponent<Image>().sprite;
+
+        // SỬA TẠI ĐÂY: Tìm chính xác Canvas PlayerUI
+        GameObject playerUiCanvas = GameObject.FindWithTag("PlayerUI");
+        if (playerUiCanvas != null)
+        {
+            // Chỉ tìm đối tượng con tên là "Use_Button" để làm nhiệm vụ
+            Transform useBtnTransform = playerUiCanvas.transform.Find("Canvas/Btn_Use");
+            // Lưu ý: Nếu cấu trúc Hierarchy của bạn là PlayerUI -> Canvas -> Btn_Use thì điền đường dẫn như trên.
+            // Nếu Btn_Use nằm ngay dưới PlayerUI thì chỉ cần điền transform.Find("Btn_Use");
+
+            if (useBtnTransform == null) useBtnTransform = playerUiCanvas.transform.Find("Use_Button");
+
+            if (useBtnTransform != null)
+            {
+                ActionButton = useBtnTransform.GetComponent<Button>();
+                BaseUseSprite = ActionButton.gameObject.GetComponent<Image>().sprite;
+            }
+        }
     }
 
     public virtual void CheckInteractionInput()

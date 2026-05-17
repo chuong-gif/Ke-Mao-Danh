@@ -1,22 +1,43 @@
 using UnityEngine;
+using TMPro; // Thêm thư viện này để đọc dữ liệu từ ô nhập
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject menMenu_Main;
-    public GameObject Menu_Online;
-    public GameObject Menu_Create_Game;
+    [Header("Menus")]
+    public GameObject menuMain;
+    public GameObject menuOnline;
+    public GameObject menuCreateGame;
+    public GameObject menuFindGame;
+    public GameObject menuEnterCode;
 
-    // Hàm này sẽ gọi khi bạn bấm nút
+    [Header("Private Room")]
+    public TMP_InputField codeInputField;
+
     public void SwitchToMenu(int menuIndex)
     {
-        // Tắt tất cả trước
-        menMenu_Main.SetActive(false);
-        Menu_Online.SetActive(false);
-        Menu_Create_Game.SetActive(false);
+        // Tắt tất cả các menu
+        menuMain.SetActive(false);
+        menuOnline.SetActive(false);
+        menuCreateGame.SetActive(false);
+        menuFindGame.SetActive(false);
+        menuEnterCode.SetActive(false);
 
-        // Bật cái được chọn
-        if (menuIndex == 1) menMenu_Main.SetActive(true);
-        else if (menuIndex == 2) Menu_Online.SetActive(true);
-        else if (menuIndex == 3) Menu_Create_Game.SetActive(true);
+        // Bật menu theo số thứ tự
+        if (menuIndex == 1) menuMain.SetActive(true);
+        else if (menuIndex == 2) menuOnline.SetActive(true);
+        else if (menuIndex == 3) menuCreateGame.SetActive(true);
+        else if (menuIndex == 4) menuFindGame.SetActive(true);
+        else if (menuIndex == 5) menuEnterCode.SetActive(true);
+    }
+
+    // Hàm gọi khi nhấn JOIN ở menu Enter Code
+    public void JoinPrivateRoom()
+    {
+        string code = codeInputField.text;
+        if (code.Length >= 4)
+        {
+            Debug.Log("Đang kết nối vào phòng với mã: " + code);
+            // Sau này sẽ thêm code Photon/Netcode vào đây để kết nối thật
+        }
     }
 }
