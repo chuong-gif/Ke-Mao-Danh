@@ -398,8 +398,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f91ed079bc73f48b0c939b273cb565, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CanInteract: 1
   CustomActionSprite: {fileID: 0}
+  BaseUseSprite: {fileID: 0}
+  PlayerEnt: {fileID: 0}
+  ActionButton: {fileID: 0}
+  InArea: 0
+  Using: 0
   Download_Speed: 0.065
+  DownloadUI: {fileID: 0}
+  SliderUi: {fileID: 0}
+  IsFinished: 0
 --- !u!61 &52654795
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -899,6 +908,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6987098851816385330, guid: 250d060dee482064dad15d934f175aee,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7814,7 +7828,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1295656370}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
