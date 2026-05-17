@@ -8,17 +8,19 @@ public class GameManager : MonoBehaviour
     // Biến lưu trữ màu sắc nhân vật đã chọn
     public Color SelectedColor = Color.white;
 
-    void Awake()
+    private void Awake()
+{
+    // Logic tạo Singleton chuẩn
+    if (Instance == null)
     {
-        // Kiểm tra nếu đã có GameManager rồi thì xóa cái mới này đi, tránh trùng lặp
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // LỆNH QUAN TRỌNG: Giữ lại Object này khi đổi Scene
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
+        
+        // LỆNH QUYẾT ĐỊNH: Giữ lại GameManager này xuyên suốt các Scene
+        DontDestroyOnLoad(gameObject); 
     }
+    else
+    {
+        Destroy(gameObject);
+    }
+}
 }

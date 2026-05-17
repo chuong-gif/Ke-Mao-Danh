@@ -7,22 +7,17 @@ public class Custom_Color : MonoBehaviour
 
     public void SetColor(int colorIndex)
     {
+        // 1. Nhuộm màu trực tiếp cho nhân vật ở sảnh chờ xem trước
         if (Player.localPlayer != null)
         {
-            Color newColor = allColors[colorIndex];
-
-            // 1. Đổi màu ngay lập tức cho nhân vật ở Lobby xem thử
-            Player.localPlayer.SetColor(newColor);
-
-            // 2. CẤT MÀU NÀY VÀO GAMEMANAGER ĐỂ MANG SANG MAP SKELD
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.SelectedColor = newColor;
-            }
+            Player.localPlayer.SetColor(allColors[colorIndex]);
         }
-        else
+
+        // 2. QUAN TRỌNG: Lưu màu này vào GameManager để mang sang map Skeld
+        if (GameManager.Instance != null)
         {
-            Debug.LogWarning("Chưa tìm thấy localPlayer trong Scene!");
+            GameManager.Instance.SelectedColor = allColors[colorIndex];
+            Debug.Log("Đã lưu màu vào GameManager để chuẩn bị chuyển map!");
         }
     }
 

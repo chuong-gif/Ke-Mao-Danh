@@ -12008,7 +12008,7 @@ MonoBehaviour:
   PlayerAnimator: {fileID: 2017062166}
   PlayerCamera: {fileID: 40985908}
   Speed: 10
-  Team: 0
+  Team: 1
   bodyDeadPrefab: {fileID: 4425994689079963105, guid: ed3a4d7021f51dd4abbb8ae80500bc9e,
     type: 3}
   useButton: {fileID: 1398276327}

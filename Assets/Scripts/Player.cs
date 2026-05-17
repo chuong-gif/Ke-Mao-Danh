@@ -34,20 +34,19 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        // CHỈ NGƯỜI CHƠI THẬT MỚI ĐƯỢC GÁN VÀO SINGLETON
+        // CHỈ NGƯỜI CHƠI THẬT (BẢN THÂN BẠN) MỚI CHẠY LOGIC KHỞI TẠO NÀY
         if (isLocalPlayer)
         {
             localPlayer = this;
-        }
-
-        originalScale = transform.localScale;
-        PlayerRigidbody = GetComponent<Rigidbody2D>();
-
-        // CHỈ NGƯỜI CHƠI THẬT MỚI CẦN CAMERA VÀ UI
-        if (isLocalPlayer)
-        {
             PlayerHud = GameObject.FindWithTag("PlayerUI");
             if (PlayerCamera == null) PlayerCamera = Camera.main;
+
+            // ĐOẠN ĐỒNG BỘ MÀU: Đã được đưa vào ĐÂY để CHỈ nhuộm màu cho đúng máy bạn
+            if (GameManager.Instance != null)
+            {
+                SetColor(GameManager.Instance.SelectedColor);
+                Debug.Log("Player chính đã tự động lấy lại màu từ GameManager!");
+            }
 
             // Kết nối nút KILL bấm bằng chuột trên UI
             if (killButton != null)
@@ -62,12 +61,18 @@ public class Player : MonoBehaviour
 
             UpdateRoleUI();
         }
-        else
+        else // ĐỐI VỚI CÁC CON RỐI (PUPPET)
         {
-            // Nếu là "CON RỐI" của người khác chạy trên máy mình: Tắt Camera và Rigidbody đi để đỡ tốn hiệu năng
+            // Tắt Camera đi để không bị đè góc nhìn của người chơi chính
             if (PlayerCamera != null) PlayerCamera.gameObject.SetActive(false);
+
+            // Dòng này vẫn comment lại để giữ va chạm cứng/mềm cho Bot test offline như cũ
             // if (PlayerRigidbody != null) PlayerRigidbody.simulated = false;
         }
+
+        // Những thành phần dùng chung cho cả bạn lẫn con rối (như Rigidbody, kích thước gốc) thì để ở ngoài
+        originalScale = transform.localScale;
+        PlayerRigidbody = GetComponent<Rigidbody2D>();
     }
 
     void Update()
