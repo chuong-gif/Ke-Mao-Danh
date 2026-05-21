@@ -22,6 +22,7 @@ public class DownloadMinigame : InteractableObject
 
         DownloadUI = GetComponentInChildren<Canvas>();
         SliderUi = DownloadUI.GetComponentInChildren<Slider>();
+        DownloadUI.enabled = false;
     }
 
     public override void ExitAction()
