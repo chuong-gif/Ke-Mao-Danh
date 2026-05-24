@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,7 +22,6 @@ public class DownloadMinigame : InteractableObject
 
         DownloadUI = GetComponentInChildren<Canvas>();
         SliderUi = DownloadUI.GetComponentInChildren<Slider>();
-        DownloadUI.enabled = false;
     }
 
     public override void ExitAction()
