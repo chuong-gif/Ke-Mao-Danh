@@ -19,6 +19,12 @@ public class CardSwapTask : InteractableObject
     {
         base.Interact();
         CardUI.enabled = true;
+
+        // BẮT BUỘC KHÓA CHÂN NGƯỜI CHƠI CHÍNH
+        if (Player.localPlayer != null)
+        {
+            Player.localPlayer.hasControl = false;
+        }
     }
 
     public override void ExitAction()
@@ -27,6 +33,11 @@ public class CardSwapTask : InteractableObject
         CardUI.enabled = false;
         SliderUi.value = 0;
 
+        // TRẢ LẠI QUYỀN ĐIỀU KHIỂN KHI THOÁT TASK
+        if (Player.localPlayer != null)
+        {
+            Player.localPlayer.hasControl = true;
+        }
     }
 
     // Start is called before the first frame update
@@ -34,8 +45,17 @@ public class CardSwapTask : InteractableObject
     {
         base.Initialize();
 
-        CardUI = GetComponentInChildren<Canvas>();
-        SliderUi = CardUI.GetComponentInChildren<Slider>();
+        // THÊM THAM SỐ (true) ĐỂ TÌM ĐƯỢC CANVAS NGAY CẢ KHI ĐANG ẨN
+        CardUI = GetComponentInChildren<Canvas>(true);
+
+        if (CardUI != null)
+        {
+            SliderUi = CardUI.GetComponentInChildren<Slider>(true);
+        }
+        else
+        {
+            Debug.LogError("LỖI: Không tìm thấy Canvas UI nào trong đối tượng " + gameObject.name);
+        }
     }
 
     // Update is called once per frame
@@ -45,7 +65,7 @@ public class CardSwapTask : InteractableObject
 
         if (Using)
         {
-            if (SliderUi.value == SliderUi.maxValue)
+            if (SliderUi.value >= SliderUi.maxValue)
             {
                 IsFinished = true;
                 ExitAction();

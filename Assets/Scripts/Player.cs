@@ -8,7 +8,6 @@ public class Player : MonoBehaviour
     public static Player localPlayer;
 
     [Header("Network Authority")]
-    // Khi test offline, ta để true. Khi làm online, Photon sẽ tự đặt true cho bạn, và false cho các "con rối"
     public bool isLocalPlayer = true;
 
     [Header("Components")]
@@ -27,28 +26,36 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject bodyDeadPrefab;
     [SerializeField] private GameObject useButton;
     [SerializeField] private GameObject killButton;
-    private Player targetPlayer; // Đổi từ GameObject thành Player để check vai trò trực tiếp
-    private bool isGhost = false;
+    private Player targetPlayer;
+    public bool isGhost = false;
+
+    // QUAN TRỌNG: Mặc định vào game phải bằng TRUE để được đi lại tự do
+    [Header("Movement Control")]
+    public bool hasControl = true;
 
     public enum TypePlayer { Impostor, Crew }
 
+    [Header("Audio")]
+    public AudioSource footstepSource; // Kéo Audio Source bước chân vào đây
+
     void Start()
     {
-        // CHỈ NGƯỜI CHƠI THẬT (BẢN THÂN BẠN) MỚI CHẠY LOGIC KHỞI TẠO NÀY
+        hasControl = true;
+        originalScale = transform.localScale;
+        PlayerRigidbody = GetComponent<Rigidbody2D>();
+
         if (isLocalPlayer)
         {
             localPlayer = this;
             PlayerHud = GameObject.FindWithTag("PlayerUI");
             if (PlayerCamera == null) PlayerCamera = Camera.main;
 
-            // ĐOẠN ĐỒNG BỘ MÀU: Đã được đưa vào ĐÂY để CHỈ nhuộm màu cho đúng máy bạn
             if (GameManager.Instance != null)
             {
                 SetColor(GameManager.Instance.SelectedColor);
                 Debug.Log("Player chính đã tự động lấy lại màu từ GameManager!");
             }
 
-            // Kết nối nút KILL bấm bằng chuột trên UI
             if (killButton != null)
             {
                 Button btn = killButton.GetComponent<Button>();
@@ -58,27 +65,30 @@ public class Player : MonoBehaviour
                     btn.onClick.AddListener(KillTarget);
                 }
             }
+            // RANDOM VAI TRÒ (50% cơ hội làm Impostor)
+            Team = (Random.value > 0.5f) ? TypePlayer.Impostor : TypePlayer.Crew;
+            Debug.Log("Vai trò của bạn ván này là: " + Team);
 
             UpdateRoleUI();
         }
-        else // ĐỐI VỚI CÁC CON RỐI (PUPPET)
+        else
         {
-            // Tắt Camera đi để không bị đè góc nhìn của người chơi chính
             if (PlayerCamera != null) PlayerCamera.gameObject.SetActive(false);
-
-            // Dòng này vẫn comment lại để giữ va chạm cứng/mềm cho Bot test offline như cũ
-            // if (PlayerRigidbody != null) PlayerRigidbody.simulated = false;
         }
-
-        // Những thành phần dùng chung cho cả bạn lẫn con rối (như Rigidbody, kích thước gốc) thì để ở ngoài
-        originalScale = transform.localScale;
-        PlayerRigidbody = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        // NẾU LÀ CON RỐI: Tuyệt đối không đọc Input bàn phím, không cập nhật UI Slider nhiệm vụ
         if (!isLocalPlayer) return;
+
+        // CHẶN ĐỌC PHÍM: Nếu đang làm Task hoặc đã thắng game thì đứng im
+        if (!hasControl)
+        {
+            movement = Vector3.zero;
+            if (PlayerAnimator != null) PlayerAnimator.SetFloat("Speed", 0f);
+            if (PlayerRigidbody != null) PlayerRigidbody.linearVelocity = Vector2.zero;
+            return;
+        }
 
         if (PlayerHud != null)
         {
@@ -86,15 +96,26 @@ public class Player : MonoBehaviour
             if (ProgressSlider != null) ProgressSlider.value = ProgressTasks.GetProgress();
         }
 
-        // Lấy Input di chuyển bàn phím
         movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0f);
+
+        // QUẢN LÝ TIẾNG BƯỚC CHÂN
+        if (footstepSource != null)
+        {
+            if (movement.magnitude > 0 && hasControl && !isGhost)
+            {
+                if (!footstepSource.isPlaying) footstepSource.Play(); // Vừa đi vừa phát nhạc
+            }
+            else
+            {
+                footstepSource.Stop(); // Đứng im hoặc làm ma thì tắt tiếng
+            }
+        }
 
         if (PlayerAnimator != null)
         {
             PlayerAnimator.SetFloat("Speed", movement.magnitude);
         }
 
-        // Lật mặt nhân vật
         if (Input.GetAxis("Horizontal") < -0.001f)
         {
             transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
@@ -107,8 +128,14 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // NẾU LÀ CON RỐI: Không tự di chuyển bằng code vật lý, vị trí của họ sẽ do mạng kéo đi
         if (!isLocalPlayer) return;
+
+        // CHẶN DI CHUYỂN VẬT LÝ VÀ TRIỆT TIÊU VẬN TỐC TRƯỢT
+        if (!hasControl)
+        {
+            if (PlayerRigidbody != null) PlayerRigidbody.linearVelocity = Vector2.zero;
+            return;
+        }
 
         if (PlayerRigidbody != null)
         {
@@ -121,21 +148,20 @@ public class Player : MonoBehaviour
         }
     }
 
-    // --- LOGIC XỬ LÝ GIẾT NGƯỜI DÀNH CHO IMPOSTOR THẬT ---
     public void KillTarget()
     {
-        // Điều kiện an toàn: Mình là LocalPlayer, là Impostor, và đang có mục tiêu Crew hợp lệ đứng gần
         if (!isLocalPlayer || Team != TypePlayer.Impostor || targetPlayer == null) return;
+
+        // PHÁT TIẾNG GIẾT NGƯỜI
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(AudioManager.Instance.killSFX);
 
         Debug.Log("Impostor đã giết nạn nhân: " + targetPlayer.name);
 
-        // 1. SINH XÁC CHẾT tại vị trí của nạn nhân
         if (bodyDeadPrefab != null)
         {
             GameObject newBody = Instantiate(bodyDeadPrefab, targetPlayer.transform.position, Quaternion.identity);
             Body_Dead deadScript = newBody.GetComponent<Body_Dead>();
 
-            // Lấy màu Sprite từ con rối bị giết để nhuộm cho cái xác
             Transform victimSprite = targetPlayer.transform.Find("Sprite");
             if (deadScript != null && victimSprite != null)
             {
@@ -144,35 +170,23 @@ public class Player : MonoBehaviour
             }
         }
 
-        // 2. KÍCH HOẠT TRẠNG THÁI CHẾT CỦA CON RỐI
-        // Gọi hàm DieAndBecomeGhost() của chính con rối đó để nó tự đổi Animation thành ma và mờ đi
         targetPlayer.DieAndBecomeGhost();
-
-        // Giết xong thì xóa mục tiêu hiện tại và làm mờ nút KILL
         targetPlayer = null;
         if (killButton != null) killButton.GetComponent<Button>().interactable = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isLocalPlayer) return; // Nếu mình là con rối thì không chạy code này
+        if (!isLocalPlayer) return;
 
-        // Kiểm tra xem thực thể chạm phải có component Player không (nghĩa là một người chơi khác)
         Player hitPlayer = collision.GetComponent<Player>();
-
-        if (hitPlayer != null && hitPlayer != this) // Không tự chọn chính mình
+        if (hitPlayer != null && hitPlayer != this)
         {
-            // ĐIỀU KIỆN QUYẾT ĐỊNH: Mình là Impostor VÀ nạn nhân phải là Crewmate
             if (Team == TypePlayer.Impostor && hitPlayer.Team == TypePlayer.Crew)
             {
-                targetPlayer = hitPlayer; // Khóa mục tiêu
-
-                if (killButton != null) killButton.GetComponent<Button>().interactable = true; // Sáng nút KILL
+                targetPlayer = hitPlayer;
+                if (killButton != null) killButton.GetComponent<Button>().interactable = true;
                 Debug.Log("Đã lọt vào tầm đánh Crewmate: " + hitPlayer.name);
-            }
-            else if (Team == TypePlayer.Impostor && hitPlayer.Team == TypePlayer.Impostor)
-            {
-                Debug.Log("Chạm phải Impostor đồng đội, nút KILL không hoạt động!");
             }
         }
     }
@@ -182,23 +196,20 @@ public class Player : MonoBehaviour
         if (!isLocalPlayer) return;
 
         Player hitPlayer = collision.GetComponent<Player>();
-        // Nếu đi xa khỏi mục tiêu hiện tại
         if (hitPlayer != null && hitPlayer == targetPlayer)
         {
             targetPlayer = null;
-            if (killButton != null) killButton.GetComponent<Button>().interactable = false; // Tắt nút KILL
+            if (killButton != null) killButton.GetComponent<Button>().interactable = false;
         }
     }
-    // Hàm này bổ sung để con rối hoặc chính mình gọi khi bị giết
+
     public void DieAndBecomeGhost()
     {
         if (isGhost) return;
         isGhost = true;
 
-        // Bật hoạt ảnh chết
         if (PlayerAnimator != null) PlayerAnimator.SetBool("IsDead", true);
 
-        // Làm mờ sprite
         Transform mySprite = transform.Find("Sprite");
         if (mySprite != null)
         {
@@ -209,9 +220,11 @@ public class Player : MonoBehaviour
             }
         }
 
-        // Chuyển Collider thành Trigger để đi xuyên tường
         Collider2D myCollider = GetComponent<Collider2D>();
         if (myCollider != null) myCollider.isTrigger = true;
+
+        // BÁO CÁO CÁI CHẾT ĐỂ KIỂM TRA XEM IMPOSTOR ĐÃ THẮNG CHƯA
+        ProgressTasks.CheckMatchState();
     }
 
     private void UpdateRoleUI()

@@ -20,9 +20,29 @@ public class DownloadMinigame : InteractableObject
     {
         base.Initialize();
 
-        DownloadUI = GetComponentInChildren<Canvas>();
-        SliderUi = DownloadUI.GetComponentInChildren<Slider>();
-        DownloadUI.enabled = false;
+        // THÊM THAM SỐ (true) ĐỂ TÌM ĐƯỢC CANVAS NGAY CẢ KHI ĐANG ẨN
+        DownloadUI = GetComponentInChildren<Canvas>(true);
+
+        if (DownloadUI != null)
+        {
+            SliderUi = DownloadUI.GetComponentInChildren<Slider>(true);
+        }
+        else
+        {
+            Debug.LogError("LỖI: Không tìm thấy Canvas UI nào trong đối tượng " + gameObject.name);
+        }
+    }
+
+    public override void Interact()
+    {
+        base.Interact();
+        DownloadUI.enabled = true;
+
+        // BẮT BUỘC KHÓA CHÂN NGƯỜI CHƠI CHÍNH
+        if (Player.localPlayer != null)
+        {
+            Player.localPlayer.hasControl = false;
+        }
     }
 
     public override void ExitAction()
@@ -30,12 +50,12 @@ public class DownloadMinigame : InteractableObject
         base.ExitAction();
         DownloadUI.enabled = false;
         SliderUi.value = 0f;
-    }
 
-    public override void Interact()
-    {
-        base.Interact();
-        DownloadUI.enabled = true;
+        // TRẢ LẠI QUYỀN ĐIỀU KHIỂN KHI THOÁT TASK
+        if (Player.localPlayer != null)
+        {
+            Player.localPlayer.hasControl = true;
+        }
     }
 
     // Update is called once per frame
