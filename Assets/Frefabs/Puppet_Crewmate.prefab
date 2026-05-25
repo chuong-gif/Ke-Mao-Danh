@@ -235,6 +235,22 @@ MonoBehaviour:
     type: 3}
   useButton: {fileID: 0}
   killButton: {fileID: 0}
+  isGhost: 0
+  hasControl: 1
+  footstepSource: {fileID: 0}
+  RandomizeSpawnPosition: 1
+  RandomSpawnMin: {x: -52, y: -23}
+  RandomSpawnMax: {x: 59, y: 18}
+  AvoidObstacleColliders: 1
+  ObstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  RequireWalkableSurface: 1
+  WalkableMask:
+    serializedVersion: 2
+    m_Bits: 0
+  SpawnCheckRadius: 0.35
+  MaxSpawnAttempts: 50
 --- !u!1 &4582596382686268255
 GameObject:
   m_ObjectHideFlags: 0
