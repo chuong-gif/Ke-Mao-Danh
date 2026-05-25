@@ -5,76 +5,54 @@ using UnityEngine.Video;
 
 public class HowToPlayVideo : MonoBehaviour
 {
-    [Header("UI")]
     public GameObject panel;
+    public VideoPlayer videoPlayer;
+    public AudioSource audioSource;
     public Button pauseButton;
     public Button closeButton;
     public TMP_Text pauseText;
-
-    [Header("Video")]
-    public VideoPlayer videoPlayer;
-    public AudioSource audioSource;
     public VideoClip tutorialClip;
 
-    private bool isPaused = false;
-
-    private void Start()
+    void Start()
     {
         panel.SetActive(false);
 
         videoPlayer.playOnAwake = false;
+
         videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
         videoPlayer.SetTargetAudioSource(0, audioSource);
 
         audioSource.playOnAwake = false;
-        audioSource.Stop();
 
         pauseButton.onClick.AddListener(TogglePause);
         closeButton.onClick.AddListener(CloseVideo);
-
-        if (pauseText != null)
-            pauseText.text = "⏸";
     }
 
     public void OpenVideo()
     {
         panel.SetActive(true);
 
-        videoPlayer.Stop();
-        audioSource.Stop();
-
         videoPlayer.clip = tutorialClip;
         videoPlayer.time = 0;
 
         videoPlayer.Play();
 
-        isPaused = false;
-
-        if (pauseText != null)
-            pauseText.text = "⏸";
+        pauseText.text = "⏸";
     }
 
     public void TogglePause()
     {
-        if (!isPaused)
+        if (videoPlayer.isPlaying)
         {
             videoPlayer.Pause();
             audioSource.Pause();
-
-            isPaused = true;
-
-            if (pauseText != null)
-                pauseText.text = "▶";
+            pauseText.text = "▶";
         }
         else
         {
             videoPlayer.Play();
             audioSource.UnPause();
-
-            isPaused = false;
-
-            if (pauseText != null)
-                pauseText.text = "⏸";
+            pauseText.text = "⏸";
         }
     }
 
@@ -84,10 +62,6 @@ public class HowToPlayVideo : MonoBehaviour
         audioSource.Stop();
 
         panel.SetActive(false);
-
-        isPaused = false;
-
-        if (pauseText != null)
-            pauseText.text = "⏸";
+        pauseText.text = "⏸";
     }
 }
