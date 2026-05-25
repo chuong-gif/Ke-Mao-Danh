@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: def43ba52fbf971438efd5b69cbab44c
+guid: 6a6f4d8c1b87cd54584b7afe77a5eebd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2235819765311827454
-    second: play-pause_0
-  - first:
-      213: 5623371531046221943
-    second: play-pause_1
+      213: -6688453936588210044
+    second: defeat 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,45 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: play-pause_0
+      name: defeat 1_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 3
-        width: 512
-        height: 507
+        y: 0
+        width: 1920
+        height: 1080
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: efd653d0b3a370f10800000000000000
-      internalID: 2235819765311827454
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: play-pause_1
-      rect:
-        serializedVersion: 2
-        x: 442
-        y: 3
-        width: 70
-        height: 506
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 778fd041d9a3a0e40800000000000000
-      internalID: 5623371531046221943
+      spriteID: 480c815e496dd23a0800000000000000
+      internalID: -6688453936588210044
       vertices: []
       indices: 
       edges: []
@@ -150,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: a8ee064d98e0afe43bb882f1b4618574
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -160,8 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      play-pause_0: 2235819765311827454
-      play-pause_1: 5623371531046221943
+      defeat 1_0: -6688453936588210044
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
