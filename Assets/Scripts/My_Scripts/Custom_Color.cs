@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class Custom_Color : MonoBehaviour
 {
-    [SerializeField] Color[] allColors;
+    [SerializeField] Color[] allColors; // Mảng này sẽ chứa tất cả màu sắc có thể chọn, kéo và thả màu vào đây trong Inspector
 
     public void SetColor(int colorIndex)
     {
@@ -21,6 +21,7 @@ public class Custom_Color : MonoBehaviour
         }
     }
 
+    // Hàm này có thể được gọi khi nhấn nút "Start Game" để chuyển sang map Skeld
     public void NextScene(int sceneIndex)
     {
         SceneManager.LoadScene(sceneIndex);

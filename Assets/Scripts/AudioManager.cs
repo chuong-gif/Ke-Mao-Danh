@@ -79,6 +79,7 @@ public class AudioManager : MonoBehaviour
     {
         if (clip != null)
         {
+            // Phát hiệu ứng âm thanh mà không làm gián đoạn nhạc nền đang phát
             sfxSource.PlayOneShot(clip);
         }
     }

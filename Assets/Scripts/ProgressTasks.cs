@@ -6,31 +6,33 @@ using UnityEngine.SceneManagement;
 
 public class ProgressTasks : MonoBehaviour
 {
-    private static float MaxProgress = 0;
-    private static float Progress = 0f;
-    private static int TaskCount = 0;
+    private static float MaxProgress = 0; // giá trị tối đa
+    private static float Progress = 0f; //giá trị hiện tại
+    private static int TaskCount = 0; // Số lượng task trong map
 
     [Header("End Game UI")]
-    [SerializeField] private GameObject victoryPanel;
+    [SerializeField] private GameObject victoryPanel; // Panel chữ VICTORY màu xanh lá
     [SerializeField] private GameObject defeatPanel; // Panel chữ DEFEAT màu đỏ
-    [SerializeField] private float delayBeforeMenu = 4.0f;
+    [SerializeField] private float delayBeforeMenu = 4.0f; // thời gian delay
 
-    private static ProgressTasks instance;
+    private static ProgressTasks instance; // Singleton instance để dễ dàng truy cập từ các lớp khác
 
     public void Start()
     {
         instance = this;
+        // dữ liệu lúc bắt đầu
         Progress = 0f;
         MaxProgress = 0f;
 
         if (victoryPanel != null) victoryPanel.SetActive(false);
         if (defeatPanel != null) defeatPanel.SetActive(false);
 
+        // tìm UI của player
         GameObject playerUi = GameObject.FindWithTag("PlayerUI");
         if (playerUi != null)
         {
             Slider slider = playerUi.GetComponentInChildren<Slider>();
-            if (slider != null) MaxProgress = slider.maxValue;
+            if (slider != null) MaxProgress = slider.maxValue; // lấy giá trị tối đa từ slider để đảm bảo đồng bộ với UI
         }
     }
 
@@ -39,8 +41,9 @@ public class ProgressTasks : MonoBehaviour
     {
         if (instance == null) return;
 
-        // Tìm TẤT CẢ Player (bao gồm bạn và các con rối) đang có trên bản đồ
+        // Tìm TẤT CẢ Player (bao gồm player và các con rối) đang có trên bản đồ
         Player[] allPlayers = FindObjectsByType<Player>(FindObjectsSortMode.None);
+        // khởi tạo giá trị đếm
         int aliveCrew = 0;
         int aliveImpostors = 0;
 
@@ -67,9 +70,11 @@ public class ProgressTasks : MonoBehaviour
         }
     }
 
+    // Hàm được gọi mỗi khi hoàn thành task
     public static void SetProgress(float value)
     {
         Progress = value;
+        // Tìm rồi cập nhật thanh progress trên UI của player
         GameObject playerUi = GameObject.FindWithTag("PlayerUI");
         if (playerUi != null)
         {
@@ -81,8 +86,11 @@ public class ProgressTasks : MonoBehaviour
         CheckMatchState();
     }
 
-    public static float GetProgress() { return Progress; }
+    public static float GetProgress() { return Progress; } // trả về tiến độ hiện tại
+
+    // giá trị mỗi nhiệm vụ đóng góp vào thanh
     public static float GetDistributedValue() { return TaskCount == 0 ? 0f : MaxProgress / TaskCount; }
+    // Hàm này được gọi khi một task mới được tạo ra để tăng số lượng task và đảm bảo tính toán giá trị phân phối chính xác
     public static void TaskSetup() { ++TaskCount; }
 
     // HÀM KẾT THÚC VÁN CHƠI VÀ BẬT UI TƯƠNG ỨNG
@@ -119,6 +127,7 @@ public class ProgressTasks : MonoBehaviour
         StartCoroutine(LoadMainMenuRoutine());
     }
 
+    //load scene main menu 
     private IEnumerator LoadMainMenuRoutine()
     {
         yield return new WaitForSeconds(delayBeforeMenu);

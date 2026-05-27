@@ -38,7 +38,6 @@ public class LobbyUIManager : MonoBehaviour
     {
         Debug.Log("Đang tải Scene bản đồ chính...");
 
-        // Thay chữ "Skeld" bằng TÊN CHÍNH XÁC của Scene map Skeld trong dự án của bạn
         SceneManager.LoadScene("Skeld");
     }
 }
